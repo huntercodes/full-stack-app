@@ -1,5 +1,4 @@
 <?php
-    // some change to the code
     // get the data from the form
     $investment = filter_input(INPUT_POST, 'investment',
         FILTER_VALIDATE_FLOAT);
@@ -23,7 +22,9 @@
         $error_message .= 'Interest rate must be a valid number.<br>'; 
     } else if ( $interest_rate <= 0 ) {
         $error_message .= 'Interest rate must be greater than zero.<br>'; 
-    } 
+    } else if ( $interest_rate > 15 ) {
+        $error_message .= 'Interest rate must be less than or equal to 15.<br>';
+    }
     
     // validate years
     if ( $years === FALSE ) {
@@ -44,7 +45,10 @@
     for ($i = 1; $i <= $years; $i++) {
         $future_value += $future_value * $interest_rate * .01; 
     }
-    // some change to the code
+    
+    $current_date = date('m/d/Y');
+    echo "This calculation was done on " .$current_date . ".";
+
     // apply currency and percent formatting
     $investment_f = '$'.number_format($investment, 2);
     $yearly_rate_f = $interest_rate.'%';
