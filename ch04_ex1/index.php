@@ -28,8 +28,8 @@ $statement->execute();
 $categories = $statement->fetchAll();
 $statement->closeCursor();
 
-// Get products for selected category
-$queryProducts = 'SELECT * FROM products
+// Get products for selected category - MODIFIED
+$queryProducts = 'SELECT *, description AS productDescription FROM products
                   WHERE categoryID = :category_id
                   ORDER BY productID';
 $statement3 = $db->prepare($queryProducts);
@@ -75,6 +75,7 @@ $statement3->closeCursor();
             <tr>
                 <th>Code</th>
                 <th>Name</th>
+                <th>Description</th>
                 <th class="right">Price</th>
                 <th>&nbsp;</th>
             </tr>
@@ -83,14 +84,22 @@ $statement3->closeCursor();
             <tr>
                 <td><?php echo $product['productCode']; ?></td>
                 <td><?php echo $product['productName']; ?></td>
+                <td><?php echo $product['productDescription']; ?></td>
                 <td class="right"><?php echo $product['listPrice']; ?></td>
-                <td><form action="delete_product.php" method="post">
-                    <input type="hidden" name="product_id"
+                <td>
+                    <form action="modify_product.php" method="post">
+                        <input type="hidden" name="product_id" value="<?php echo $product['productID']; ?>">
+                        <input type="hidden" name="category_id" value="<?php echo $product['categoryID']; ?>">
+                        <input type="submit" value="Modify">
+                    </form>
+                    <form action="delete_product.php" method="post">
+                        <input type="hidden" name="product_id"
                            value="<?php echo $product['productID']; ?>">
-                    <input type="hidden" name="category_id"
+                        <input type="hidden" name="category_id"
                            value="<?php echo $product['categoryID']; ?>">
-                    <input type="submit" value="Delete">
-                </form></td>
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
             <?php endforeach; ?>
         </table>
